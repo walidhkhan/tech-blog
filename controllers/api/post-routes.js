@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const { Post, User, Vote, Comment } = require('../../models');
 const sequelize = require('../../config/connection');
+const { Post, User, Vote, Comment } = require('../../models');
 const withAuth = require('../../utils/auth')
 
 
@@ -86,8 +86,8 @@ router.post('/', withAuth, (req, res) => {
 // PUT /api/posts/upvote
 router.put('/upvote', withAuth, (req, res) => {
     // custom static method created in models/Post.js
-    Post.upvote(req.body, { Vote })
-        .then(postdata => res.json(postdata))
+    Post.upvote({...req.body, user_id: req.session.user_id}, { Vote, Comment, User })
+        .then(updatedpostdata => res.json(updatedpostdata))
         .catch(err => res.json(err));
 });
 
