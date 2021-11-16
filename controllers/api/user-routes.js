@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { User } = require('../../models');
+const { User, Post, Vote, Comment } = require('../../models');
+const withAuth = require('../../utils/auth');
 
 // GET /api/users
 router.get('/', (req, res) => {
@@ -16,7 +17,27 @@ router.get('/:id', (req, res) => {
         attributes: { exclude: ['password']},
         where: {
             id: req.params.id
-        }
+        },
+        include: [
+            {
+                model: Post,
+                attributes: ['id', 'title', 'post_url', 'created_at']
+            },
+            {
+                model: Comment,
+                attributes: ['id', 'comment_text', 'created_at'],
+                include: {
+                    model: Post,
+                    attributes: ['title']
+                }
+            },
+            {
+                model: Post,
+                attributes: ['title'],
+                through: Vote,
+                as: 'voted_posts'
+            }
+        ]
     })
         .then(userdata => {
             if (!userdata) {
@@ -35,7 +56,14 @@ router.post('/', (req, res) => {
         email: req.body.email,
         password: req.body.password
     })
-        .then(userdata => res.json(userdata))
+        .then(userdata => {
+            req.session.save(() => {
+                req.session.user_id = userdata.id;
+                req.session.userdata = userdata.username;
+                req.session.loggedIn = true;
+                res.json(userdata)
+            })
+        })
         .catch(err => res.status(500).json(err));
 });
 
@@ -58,7 +86,13 @@ router.post('/login', (req, res) => {
             return;
         }
 
-        res.json({ user: userdata, message: 'You are now logged in!'});
+        req.session.save(() => {
+            req.session.user_id = userdata.id;
+            req.sesstion.username = userdata.username;
+            req.session.loggedIn = true;
+
+            res.json({ user: userdata, message: 'You are now logged in!' });
+        });
     });
 });
 
