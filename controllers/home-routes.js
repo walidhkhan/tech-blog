@@ -28,6 +28,7 @@ router.get('/', (req, res) => {
             }
         ]
     })
+    // 
     .then(postdata => {
         // pass a single post object into the homepage template
         // console.log(postdata[0]);
