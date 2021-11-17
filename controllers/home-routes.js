@@ -31,11 +31,13 @@ router.get('/', (req, res) => {
     })
         .then(postdata => {
             const posts = postdata.map(post => post.get({ plain: true }));
+            console.log(req);
 
             res.render('homepage', {
                 posts,
-                loggedIn: req.session.loggedIn
+                loggedIn: res.session.loggedIn
             });
+
         })
         .catch(err => {
             console.log(err);
