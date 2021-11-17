@@ -4,7 +4,7 @@ const { Post, User, Comment } = require('../models');
 
 // get all posts
 router.get('/', (req, res) => {
-    console.log(req.session);
+    // console.log(req);
 
     Post.findAll({
         attributes: [
@@ -31,11 +31,10 @@ router.get('/', (req, res) => {
     })
         .then(postdata => {
             const posts = postdata.map(post => post.get({ plain: true }));
-            console.log(req);
-
+            // console.log('helloWorld');
             res.render('homepage', {
                 posts,
-                loggedIn: res.session.loggedIn
+                loggedIn: req.session.loggedIn
             });
 
         })

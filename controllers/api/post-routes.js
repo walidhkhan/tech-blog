@@ -1,12 +1,13 @@
 const router = require('express').Router();
 const sequelize = require('../../config/connection');
 const { Post, User, Vote, Comment } = require('../../models');
-const withAuth = require('../../utils/auth')
+// const withAuth = require('../../utils/auth')
 
 
 // get all users
 router.get('/', (req, res) => {
     console.log('======================');
+    // console.log(req);
     Post.findAll({
         // Query configuration
         attributes: [
@@ -73,7 +74,8 @@ router.get('/id:', (req, res) => {
         .catch(err => res.status(500).json(err));
 });
 
-router.post('/', withAuth, (req, res) => {
+router.post('/', (req, res) => {
+    console.log('test');
     Post.create({
         title: req.body.title,
         post_url: req.body.post_url,
@@ -84,14 +86,14 @@ router.post('/', withAuth, (req, res) => {
 });
 
 // PUT /api/posts/upvote
-router.put('/upvote', withAuth, (req, res) => {
+router.put('/upvote', (req, res) => {
     // custom static method created in models/Post.js
     Post.upvote({...req.body, user_id: req.session.user_id}, { Vote, Comment, User })
         .then(updatedpostdata => res.json(updatedpostdata))
         .catch(err => res.json(err));
 });
 
-router.put('/:id', withAuth, (req, res) => {
+router.put('/:id', (req, res) => {
     Post.update(
         {
             title: req.body.title
@@ -112,7 +114,7 @@ router.put('/:id', withAuth, (req, res) => {
         .catch(err => res.status(500).json(err));
 });
 
-router.delete('/:id', withAuth, (req, res) => {
+router.delete('/:id', (req, res) => {
     Post.destroy({
         where: {
             id: req.params.id
