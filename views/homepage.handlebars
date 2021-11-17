@@ -1,18 +1,25 @@
 <ol class="post-list">
     {{#each posts as |post|}}
-        <li>
-            <article class="post">
-                <div class="title">
-                    <a href="{{post.post_url}}" target="_blank">{{post.title}}</a>
-                    <span>({{post.post_url}})</span>
-                </div>
-                <div class="meta">
-                    {{post.vote_count}} point(s) by {{post.user.username}} on
-                    {{post.created_at}}
-                    |
-                    <a href="/post/{{post.id}}">{{post.comments.length}} comment(s)</a>
-                </div>
-            </article>
-        </li>
+    <li>
+        <article class="post">
+            <div class="title">
+                <a href="{{post.post_url}}" target="_blank">{{post.title}}</a>
+                <span>({{post.post_url}})</span>
+            </div>
+            <div class="meta">
+                {{post.vote_count}} point(s) by {{post.user.username}} on
+                {{post.created_at}}
+                |
+                <a href="/post/{{post.id}}"> {{post.comments.length}} comment(s)</a>
+            </div>
+            <div>
+                {{#each post.comments}}
+                <div>{{user.username}} says {{comment_text}}</div>
+                {{/each}}
+            </div>
+
+            {{!-- {{log post.comments}} --}}
+        </article>
+    </li>
     {{/each}}
 </ol>

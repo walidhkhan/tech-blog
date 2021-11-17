@@ -1,3 +1,4 @@
+{{!-- refers to logged out users --}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,7 +14,16 @@
         <a href="/">BlogginTechnologies</a>
     </h1>
     <nav>
-        <a href="/login">login</a>
+        {{#if loggedIn}}
+        <a href="/dashboard">Dashboard</a>
+        <a href="/dashboard/create" class="navbar-item">Create Post</a>
+        <button id="logout" class="button is-primary">Logout</button>
+
+        {{else}}
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+        <a href="/signup">Signup</a>
+        {{/if}}
     </nav>
 </header>
 
@@ -32,6 +42,8 @@
         </footer>
     </div>
 
+    <script src='/javascript/logout.js'></script>
+    {{!-- <script src='/javascript/create-post.js'></script> --}}
 </body>
 
 </html>

@@ -5,7 +5,7 @@ const { User, Post, Vote, Comment } = require('../../models');
 // GET /api/users
 router.get('/', (req, res) => {
     User.findAll({
-        attributes: { exclude: ['password']}
+        attributes: { exclude: ['password'] }
     })
         .then(userdata => res.json(userdata))
         .catch(err => res.status(500).json(err));
@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 // GET /api/users/1
 router.get('/:id', (req, res) => {
     User.findOne({
-        attributes: { exclude: ['password']},
+        attributes: { exclude: ['password'] },
         where: {
             id: req.params.id
         },
@@ -75,14 +75,14 @@ router.post('/login', (req, res) => {
         }
     }).then(userdata => {
         if (!userdata) {
-            res.status(400).json({ message: 'No user with that email address!'});
+            res.status(400).json({ message: 'No user with that email address!' });
             return;
         }
         // Verify user
         const validPassword = userdata.checkPassword(req.body.password);
 
         if (!validPassword) {
-            res.status(400).json({ message: 'Incorrect password!'});
+            res.status(400).json({ message: 'Incorrect password!' });
             return;
         }
         // console.log(req.session);
@@ -96,13 +96,17 @@ router.post('/login', (req, res) => {
     });
 });
 
+// log out route
 router.post('/logout', (req, res) => {
     if (req.session.loggedIn) {
         req.session.destroy(() => {
-            res.status(204).end();
+            res
+                .status(204)
+                .json({ message: 'You are now logged out!' })
+                .end();
         });
     } else {
-        res.status(404).end();
+        res.status(400).end();
     }
 });
 
