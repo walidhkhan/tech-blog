@@ -111,7 +111,7 @@ router.get('/create/', withAuth, (req, res) => {
         .then(postdata => {
             // serialize data before passing to template
             const posts = postdata.map(post => post.get({ plain: true }));
-            res.render('createpost', { posts, loggedIn: true });
+            res.render('add-post', { posts, loggedIn: true });
         })
         .catch(err => {
             console.log(err);
