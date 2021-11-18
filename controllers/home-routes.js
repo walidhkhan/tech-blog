@@ -61,13 +61,11 @@ router.get('/signup', (req, res) => {
     res.render('signup');
 });
 
-router.get('/create-post', (req, res) => {
+router.get('/createpost', (req, res) => {
     if (req.session.loggedIn) {
-        res.redirect('/');
-        return;
+        res.render('createpost');
     }
 
-    res.render('creat-post');
 });
 
 // get single post
